@@ -19,8 +19,9 @@ export function createAppApi<HostElement>(
           throw new Error("Render function is not defined");
         }
 
-        const message = rootComponent.render();
-        render(message, rootContainer);
+        const vnode = rootComponent.render();
+
+        render(vnode, rootContainer);
       },
     };
 

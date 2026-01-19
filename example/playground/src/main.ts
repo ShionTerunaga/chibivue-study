@@ -1,8 +1,8 @@
-import { createApp } from "chibivue";
+import { createApp, h } from "chibivue";
 
 const app = createApp({
   render() {
-    return "<h1>Hello, ChibiVue!</h1>";
+    return h("h1", {}, ["Hello, ChibiVue!"]);
   },
 });
 

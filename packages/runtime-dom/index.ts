@@ -1,8 +1,9 @@
 import { createRenderer, RendererElement } from "../runtime-core";
 import { createAppApi, CreateAppFunction } from "../runtime-core/apiCreateApp";
 import { nodeOps } from "./nodeOps";
+import { patchProp } from "./patchProp";
 
-const { render } = createRenderer(nodeOps);
+const { render } = createRenderer({ ...nodeOps, patchProp });
 const _createApp = createAppApi(render);
 
 export const createApp = ((...args) => {
@@ -15,6 +16,7 @@ export const createApp = ((...args) => {
       typeof rootContainer === "string"
         ? document.querySelector(rootContainer)
         : rootContainer;
+
     if (!container) {
       throw new Error("Container not found");
     }

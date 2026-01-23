@@ -1,6 +1,6 @@
 export interface VNode {
   type: string;
-  proops: VNodeProps;
+  props: VNodeProps;
   children: Array<VNode | string>;
 }
 

@@ -1,7 +1,6 @@
-import { text } from "stream/consumers";
 import { RerendererOptions } from "../runtime-core";
 
-export const nodeOps: RerendererOptions = {
+export const nodeOps: Omit<RerendererOptions, "patchProp"> = {
   createElement: (tagName) => {
     return document.createElement(tagName);
   },

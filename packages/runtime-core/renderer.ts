@@ -1,6 +1,9 @@
 import { VNode } from "./vcode";
 
-export interface RerendererOptions<HostNode = RenderNode> {
+export interface RerendererOptions<
+  HostNode = RenderNode,
+  HostElement = RendererElement,
+> {
   createElement: (type: string) => HostNode;
 
   createText: (text: string) => HostNode;
@@ -8,6 +11,8 @@ export interface RerendererOptions<HostNode = RenderNode> {
   setElementText(node: HostNode, text: string): void;
 
   insert(child: HostNode, parent: HostNode, anchor?: HostNode): void;
+
+  patchProp(el: HostElement, key: string, value: any): void;
 }
 
 export interface RenderNode {
@@ -18,11 +23,12 @@ export interface RendererElement extends RenderNode {}
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   message: string,
-  container: HostElement
+  container: HostElement,
 ) => void;
 
 export function createRenderer(options: RerendererOptions) {
   const {
+    patchProp: hostPatchProp,
     createElement: hostCreateElement,
     createText: hostCreateText,
     insert: hostInsert,
@@ -38,6 +44,10 @@ export function createRenderer(options: RerendererOptions) {
       const childEl = renderVNode(child);
       hostInsert(childEl, el);
     }
+
+    Object.entries(vnode.props).forEach(([Key, value]) => {
+      hostPatchProp(el, Key, value);
+    });
 
     return el;
   }

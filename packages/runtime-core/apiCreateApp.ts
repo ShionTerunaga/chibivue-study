@@ -1,3 +1,4 @@
+import { ReactiveEffect } from "../reactivity/effect";
 import { Component } from "./component";
 import { RootRenderFunction } from "./renderer";
 
@@ -6,22 +7,29 @@ export interface App<HostElement = any> {
 }
 
 export type CreateAppFunction<HostElement = any> = (
-  rootComponent: Component
+  rootComponent: Component,
 ) => App<HostElement>;
 
 export function createAppApi<HostElement>(
-  render: RootRenderFunction<HostElement>
+  render: RootRenderFunction<HostElement>,
 ): CreateAppFunction<HostElement> {
   return function createApp(rootComponent) {
     const app: App = {
       mount(rootContainer: HostElement) {
-        if (!rootComponent.render) {
+        if (!rootComponent.setup) {
           throw new Error("Render function is not defined");
         }
 
-        const vnode = rootComponent.render();
+        const componentRender = rootComponent.setup();
 
-        render(vnode, rootContainer);
+        const updateComponent = () => {
+          const vnode = componentRender();
+          render(vnode, rootContainer);
+        };
+
+        const effect = new ReactiveEffect(updateComponent);
+
+        effect.run();
       },
     };
 

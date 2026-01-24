@@ -1,27 +1,31 @@
-import { createApp, h } from "chibivue";
+import { createApp, h, reactive } from "chibivue";
 
 const app = createApp({
-  render() {
-    return h("div", {}, [
-      h("h1", { id: "title" }, ["Hello, ChibiVue!"]),
-      h(
-        "button",
-        {
-          style: {
-            color: "white",
-            backgroundColor: "blue",
-            padding: "10px",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
+  setup() {
+    const state = reactive({ count: 0 });
+
+    return function render() {
+      return h("div", {}, [
+        h("h1", { id: "title" }, ["Hello, ChibiVue!"]),
+        h(
+          "button",
+          {
+            style: {
+              color: "white",
+              backgroundColor: "blue",
+              padding: "10px",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            },
+            onClick: () => {
+              state.count++;
+            },
           },
-          onClick: () => {
-            alert("Button clicked!");
-          },
-        },
-        ["Click Me"],
-      ),
-    ]);
+          [`Count: ${state.count}`],
+        ),
+      ]);
+    };
   },
 });
 

@@ -1,13 +1,9 @@
-import { VNode, VNodeProps } from "./vcode";
+import { createVNode, VNode, VNodeProps } from "./vnode";
 
 export function h(
   type: string,
   props: VNodeProps,
-  children: Array<VNode | string>
+  children: Array<VNode | string>,
 ) {
-  return {
-    type,
-    props,
-    children,
-  };
+  return createVNode(type, props, children);
 }
